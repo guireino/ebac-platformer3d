@@ -4,28 +4,43 @@ using UnityEngine;
 
 public class Player : MonoBehaviour{
 
+    private float _currentSpeed;
+    private bool _isRunning = false;
     public Rigidbody2D rb;
 
     public Vector2 friction = new Vector2(.1f, 0);
 
-    public float speed, forceJump = 2;
+    public float speed, speedRun, forceJump = 2;
 
     // Update is called once per frame
     void Update(){
         
         HandleJump();
-        HandleMoment();
+        HandleMoviment();
     }
 
 
-    private void HandleMoment(){
+    private void HandleMoviment(){
+
+        /*
+        if(Input.GetKey(KeyCode.LeftControl)){
+            _currentSpeed = speedRun;
+            //Debug.Log("speedRun LeftControl " + speedRun);
+        }else{
+            _currentSpeed = speed;
+            //Debug.Log("speed LeftControl " + speed);
+        }
+        */
+
+        _isRunning = Input.GetKey(KeyCode.LeftControl);
 
         if(Input.GetKey(KeyCode.LeftArrow)){
            // rb.MovePosition(rb.position - velocity * Time.deltaTime);
-           rb.velocity = new Vector2(-speed, rb.velocity.y);
+           // "?" verificando se verdadeiro or ":" nao
+           rb.velocity = new Vector2(Input.GetKey(KeyCode.LeftControl) ? -_currentSpeed : -speedRun, rb.velocity.y);
         }else if(Input.GetKey(KeyCode.RightArrow)){
            // rb.MovePosition(rb.position + velocity * Time.deltaTime);
-           rb.velocity = new Vector2(speed, rb.velocity.y);
+           rb.velocity = new Vector2(_currentSpeed, rb.velocity.y);
         }
 
 
