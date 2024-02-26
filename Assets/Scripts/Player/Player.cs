@@ -12,10 +12,15 @@ public class Player : MonoBehaviour{
     public float speed, speedRun, forceJump = 2;
 
     [Header("Animation setup")]
-    private float _currentSpeed;
-    private bool _isRunning = false;
     public Ease ease = Ease.OutBack;
     public float jumpScaleY = 1.5f, jumpScaleX = 0.7f, animationDuration = .3f;
+
+    [Header("Animation Player")]
+    private float _currentSpeed;
+    private bool _isRunning = false;
+    public Animator animator;
+    public float playerSwipeDuration = .1f;
+    public string boolRun = "Run";
 
     // Update is called once per frame
     void Update(){
@@ -24,16 +29,17 @@ public class Player : MonoBehaviour{
         HandleMoviment();
     }
 
-
     private void HandleMoviment(){
         
         //verificando se esta andando ou corrento
         if(Input.GetKey(KeyCode.LeftControl)){
             _currentSpeed = speedRun;
             //Debug.Log("speedRun LeftControl " + speedRun);
+            animator.speed = 2;
         }else{
             _currentSpeed = speed;
             //Debug.Log("speed LeftControl " + speed);
+            animator.speed = 1;
         }
         
 
@@ -44,11 +50,29 @@ public class Player : MonoBehaviour{
            // "?" verificando se verdadeiro or ":" nao
            //rb.velocity = new Vector2(Input.GetKey(KeyCode.LeftControl) ? -_currentSpeed : -speedRun, rb.velocity.y);
            rb.velocity = new Vector2(-_currentSpeed, rb.velocity.y);
+           //rb.transform.localScale = new Vector3(-1, 1, 1); // monanto sprite de lado
+
+           if(rb.transform.localScale.x != -1){  // se for igual -1
+                rb.transform.DOScaleX(-1, playerSwipeDuration);  // DOScaleX vai virar sprite do player
+                //animator.speed = 2;
+           }
+
+           animator.SetBool(boolRun, true);
         }else if(Input.GetKey(KeyCode.RightArrow)){
            // rb.MovePosition(rb.position + velocity * Time.deltaTime);
+           
            rb.velocity = new Vector2(_currentSpeed, rb.velocity.y);
-        }
 
+           if(rb.transform.localScale.x != 1){  // se for igual 1
+                rb.transform.DOScaleX(1, playerSwipeDuration);  // DOScaleX vai virar sprite do player
+           } 
+
+           rb.transform.localScale = new Vector3(1, 1, 1); // mudando sprite de lado
+
+           animator.SetBool(boolRun, true);
+        }else{
+            animator.SetBool(boolRun, false);
+        }
 
         if(rb.velocity.x > 0){
             rb.velocity += friction;
