@@ -34,8 +34,8 @@ public class ItemManager : Singleton<ItemManager>{
         UpdateUI();
     }
 
-    private void UpdateUI(){
-       // uiTextCoins.text = coins.ToString();'
+    private void UpdateUI(){ // usamos SOUIIntUpdate para atualizar UI coins
+       // uiTextCoins.text = coins.ToString(); // método clássico para atualizar UI coins
        //UIInGameManager.Instance.UpdateTextCoins(coins.ToString());
        //UIInGameManager.UpdateTextCoins(coins.value.ToString());
     }
