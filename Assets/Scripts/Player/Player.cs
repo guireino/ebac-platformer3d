@@ -31,6 +31,12 @@ public class Player : MonoBehaviour{
     private bool _isRunning = false;
     public SOPlayerSetup soPlayerSetup;
 
+    [Header("Jump Collision Check")]
+    public ParticleSystem jumpVFX;
+    public Collider2D col;
+    public float distToGround;
+    public float spaceToGround = .1f;
+
     //public Animator animator;
 
     void Awake() {
@@ -40,6 +46,16 @@ public class Player : MonoBehaviour{
         }
 
         _currentPlayer = Instantiate(soPlayerSetup.player, transform);
+
+        if(col != null){
+            distToGround = col.bounds.extents.y; //verificando se player esta encostado no chão
+        }
+    }
+
+    private bool IsGrounded(){
+        Debug.DrawRay(transform.position, -Vector2.up, Color.magenta, distToGround + spaceToGround); //criando um linha para verificar se esta encostando no chão
+
+        return Physics2D.Raycast(transform.position, -Vector2.up, distToGround + spaceToGround);
     }
 
     private void OnPlayerKill(){
@@ -50,6 +66,7 @@ public class Player : MonoBehaviour{
     // Update is called once per frame
     void Update(){
         
+        IsGrounded();
         HandleJump();
         HandleMoviment();
     }
@@ -110,14 +127,24 @@ public class Player : MonoBehaviour{
 
     private void HandleJump(){
 
-        if(Input.GetKeyDown(KeyCode.Space)){
+        if(Input.GetKeyDown(KeyCode.Space) && IsGrounded()){
             rb.velocity = Vector2.up * soPlayerSetup.forceJump;
 
             rb.transform.localScale = Vector2.one; // resetando escala player
             DOTween.Kill(rb.transform);  // matando animação para volta origina
 
             HandleScaleJump();
+            PlayJumpVFX();
         }
+    }
+
+    private void PlayJumpVFX(){
+
+        // if (jumpVFX != null){
+        //     jumpVFX.Play();
+        // }
+
+        VFXManager.Instance.PlayVFXByType(VFXManager.VFXType.JUMP, transform.position);
     }
 
     private void HandleScaleJump(){
