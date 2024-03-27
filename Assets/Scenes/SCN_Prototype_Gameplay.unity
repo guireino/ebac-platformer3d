@@ -9666,6 +9666,10 @@ PrefabInstance:
       propertyPath: playerSideReference
       value: 
       objectReference: {fileID: 94377603}
+    - target: {fileID: 7100513445110187743, guid: 00afc9fb4087652419d090da0b825d97, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8007466312498025151, guid: 00afc9fb4087652419d090da0b825d97, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
